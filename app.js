@@ -37,10 +37,9 @@ function verificarChute() {
 
     responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
 
-    // Espera 2 segundos antes de falar a próxima frase
     setTimeout(() => {
       responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
-    }, 2000);
+    }, 1000); // 1 segundo de pausa
 
     document.getElementById('reiniciar').removeAttribute('disabled');
   } else {
