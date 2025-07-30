@@ -1,97 +1,106 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const startScreen = document.getElementById('startScreen');
-  const gameScreen = document.getElementById('gameScreen');
-  const btnStart = document.getElementById('btnStart');
-  const btnChutar = document.getElementById('btnChutar');
-  const btnReiniciar = document.getElementById('btnReiniciar');
-  const inputNumero = document.getElementById('inputNumero');
-  const titulo = document.getElementById('titulo');
-  const instrucao = document.getElementById('instrucao');
-  const feedback = document.getElementById('feedback');
+let listaDeNumerosSorteados = [];
+const numeroLimite = 10;
+let numeroSecreto = gerarNumeroAleatorio();
+let tentativas = 1;
 
-  let listaDeNumerosSorteados = [];
-  const numeroLimite = 10;
-  let numeroSecreto;
-  let tentativas;
+function numeroPorExtenso(num) {
+  const numerosExtenso = ['zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez'];
+  return numerosExtenso[num] || num;
+}
 
-  function numeroPorExtenso(num) {
-    const numerosExtenso = ['zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez'];
-    return numerosExtenso[num] || num;
+function exibirTextoNaTela(tag, texto, falar = true) {
+  let campo = document.querySelector(tag);
+  campo.innerHTML = texto;
+  if (falar) {
+    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', { rate: 1.2 });
+  }
+}
+
+function verificarChute() {
+  let chute = document.querySelector('input').value;
+
+  if (!chute) {
+    alert('Por favor, digite um número entre 1 e 10.');
+    return;
   }
 
-  function falar(texto) {
-    if (responsiveVoice.voiceSupport()) {
-      responsiveVoice.speak(texto, 'Brazilian Portuguese Female', { rate: 1.2 });
-    }
+  if (chute < 1 || chute > 10) {
+    alert('Número inválido! Escolha um número entre 1 e 10.');
+    limparCampo();
+    return;
   }
 
-  function gerarNumeroAleatorio() {
-    if (listaDeNumerosSorteados.length === numeroLimite) {
-      listaDeNumerosSorteados = [];
-    }
+  if (parseInt(chute) === numeroSecreto) {
+    let palavraTentativa = tentativas === 1 ? 'tentativa' : 'tentativas';
+    let tentativasExtenso = numeroPorExtenso(tentativas);
+    let mensagemTentativas = `Você descobriu o número secreto com ${tentativasExtenso} ${palavraTentativa}!`;
 
-    let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
+    exibirTextoNaTela('h1', 'Acertou!', false);
+    exibirTextoNaTela('p', mensagemTentativas, false);
 
-    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
-      return gerarNumeroAleatorio();
+    responsiveVoice.speak('Acertou!', 'Brazilian Portuguese Female', { rate: 1.2 });
+
+    setTimeout(() => {
+      responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
+    }, 1000);
+
+    document.getElementById('reiniciar').removeAttribute('disabled');
+  } else {
+    if (parseInt(chute) > numeroSecreto) {
+      exibirTextoNaTela('p', 'O número secreto é menor');
+      responsiveVoice.speak('O número secreto é menor', 'Brazilian Portuguese Female', { rate: 1.2 });
     } else {
-      listaDeNumerosSorteados.push(numeroEscolhido);
-      return numeroEscolhido;
+      exibirTextoNaTela('p', 'O número secreto é maior');
+      responsiveVoice.speak('O número secreto é maior', 'Brazilian Portuguese Female', { rate: 1.2 });
     }
+    tentativas++;
+    limparCampo();
+  }
+}
+
+function gerarNumeroAleatorio() {
+  if (listaDeNumerosSorteados.length === numeroLimite) {
+    listaDeNumerosSorteados = [];
   }
 
-  function iniciarJogo() {
-    startScreen.style.display = 'none';
-    gameScreen.style.display = 'block';
+  let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
 
-    numeroSecreto = gerarNumeroAleatorio();
-    tentativas = 1;
-    inputNumero.value = '';
-    feedback.innerHTML = '';
-    btnReiniciar.disabled = true;
-    titulo.innerText = 'Jogo do número secreto';
-    instrucao.innerText = 'Escolha um número entre 1 a 10';
-
-    falar('Jogo do número secreto. Escolha um número entre 1 a 10.');
-    inputNumero.focus();
+  if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
+    return gerarNumeroAleatorio();
+  } else {
+    listaDeNumerosSorteados.push(numeroEscolhido);
+    return numeroEscolhido;
   }
+}
 
-  function verificarChute() {
-    const chuteStr = inputNumero.value.trim();
-    if (!chuteStr) {
-      alert('Por favor, digite um número entre 1 e 10.');
-      return;
-    }
+function limparCampo() {
+  document.querySelector('input').value = '';
+}
 
-    const chute = parseInt(chuteStr);
-    if (isNaN(chute) || chute < 1 || chute > 10) {
-      alert('Número inválido! Escolha um número entre 1 e 10.');
-      inputNumero.value = '';
-      return;
-    }
+function reiniciarJogo() {
+  numeroSecreto = gerarNumeroAleatorio();
+  limparCampo();
+  tentativas = 1;
 
-    if (chute === numeroSecreto) {
-      let palavraTentativa = tentativas === 1 ? 'tentativa' : 'tentativas';
-      let tentativasExtenso = numeroPorExtenso(tentativas);
-      let mensagemTentativas = `Você descobriu o número secreto com ${tentativasExtenso} ${palavraTentativa}!`;
+  document.querySelector('h1').innerHTML = 'Jogo do número secreto';
+  document.querySelector('p').innerHTML = 'Escolha um número entre 1 a 10';
 
-      titulo.innerText = 'Acertou!';
-      instrucao.innerText = mensagemTentativas;
-      feedback.innerText = '';
+  document.getElementById('reiniciar').setAttribute('disabled', true);
 
-      falar('Acertou!');
+  // Fala toda a frase de uma vez, com ponto para pausa natural
+  responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
+}
 
-      setTimeout(() => {
-        falar(mensagemTentativas);
-      }, 800);
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('botaoChutar').addEventListener('click', verificarChute);
+  document.getElementById('reiniciar').addEventListener('click', reiniciarJogo);
 
-      btnReiniciar.disabled = false;
-    } else {
-      if (chute > numeroSecreto) {
-        instrucao.innerText = 'O número secreto é menor';
-        falar('O número secreto é menor');
-      } else {
-        instrucao.innerText = 'O número secreto é maior';
-        falar('O número secreto é maior');
-      }
-      ten
+  // Fala inicial ao clicar pela primeira vez na página (para ativar voz)
+  document.body.addEventListener('click', function ativarVozInicial() {
+    responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
+    document.body.removeEventListener('click', ativarVozInicial);
+  });
+
+  document.querySelector('h1').innerHTML = 'Jogo do número secreto';
+  document.querySelector('p').innerHTML = 'Escolha um número entre 1 a 10';
+});
