@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Teste Botão</title>
+  <title>Jogo do Número Secreto</title>
+  <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <button id="btnStart">Clique para começar</button>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const btnStart = document.getElementById('btnStart');
-      btnStart.addEventListener('click', function () {
-        alert('Botão funcionando!');
-      });
-    });
-  </script>
+<body>
+
+  <!-- TELA INICIAL -->
+  <div id="startScreen" style="text-align:center; margin-top:50px;">
+    <h1>Bem-vindo ao Jogo do Número Secreto!</h1>
+    <button id="btnStart" style="font-size:18px; padding:10px 20px; cursor:pointer;">
+      Clique para começar
+    </button>
+  </div>
+
+  <!-- TELA DO JOGO (ESCONDIDA NO INICIO) -->
+  <div id="gameScreen" style="display:none; text-align:center; margin-top:20px;">
+    <h1 id="titulo">Jogo do número secreto</h1>
+    <p id="instrucao">Escolha um número entre 1 a 10</p>
+    <input type="number" id="inputNumero" min="1" max="10" style="font-size:18px; padding:5px; width:60px;" />
+    <div>
+      <button id="btnChutar" style="font-size:16px; padding:8px 16px; margin:5px; cursor:pointer;">Chutar</button>
+      <button id="btnReiniciar" disabled style="font-size:16px; padding:8px 16px; margin:5px; cursor:pointer;">Novo jogo</button>
+    </div>
+    <p id="feedback" style="font-weight:bold; margin-top:15px;"></p>
+  </div>
+
+  <script src="app.js" defer></script>
 </body>
+
 </html>
