@@ -87,21 +87,28 @@ function reiniciarJogo() {
 
   document.getElementById('reiniciar').setAttribute('disabled', true);
 
-  // Aqui a fala garantida ao reiniciar
-  responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
+  // Fala a primeira parte
+  responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+
+  // Após 1,5 segundos fala a segunda parte
+  setTimeout(() => {
+    responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
+  }, 1500);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('botaoChutar').addEventListener('click', verificarChute);
   document.getElementById('reiniciar').addEventListener('click', reiniciarJogo);
 
-  // Primeira fala na primeira interação
+  // Primeira fala ao clicar no body
   document.body.addEventListener('click', function ativarVozInicial() {
-    responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
+    responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+    setTimeout(() => {
+      responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
+    }, 1500);
     document.body.removeEventListener('click', ativarVozInicial);
   });
 
-  // Texto inicial na tela
   document.querySelector('h1').innerHTML = 'Jogo do número secreto';
   document.querySelector('p').innerHTML = 'Escolha um número entre 1 a 10';
 });
