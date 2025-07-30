@@ -19,6 +19,11 @@ function exibirMensagemInicial() {
     responsiveVoice.speak('Escolha um número entre 1 e 10', 'Brazilian Portuguese Female', { rate: 1.2 });
 }
 
+function iniciarComVoz() {
+    exibirMensagemInicial();
+    document.body.removeEventListener('click', iniciarComVoz);
+}
+
 function verificarChute() {
     let chute = document.querySelector('input').value;
 
@@ -30,8 +35,7 @@ function verificarChute() {
         exibirTextoNaTela('h1', mensagemTitulo);
         exibirTextoNaTela('p', mensagemTentativas);
 
-        // Falar uma frase após a outra
-        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 }, function() {
+        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 }, function () {
             responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
         });
 
@@ -74,14 +78,16 @@ function reiniciarJogo() {
     numeroSecreto = gerarNumeroAleatorio();
     limparCampo();
     tentativas = 1;
-    exibirMensagemInicial();
+    exibirTextoNaTela('h1', 'Jogo do número secreto', false);
+    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10', false);
+
     document.getElementById('reiniciar').setAttribute('disabled', true);
+
+    // Reativa o evento para falar a mensagem no próximo clique do usuário
+    document.body.addEventListener('click', iniciarComVoz);
 }
 
-// Mensagem inicial só na primeira interação (clique)
+// Ativa a fala inicial no primeiro clique do usuário
 window.addEventListener('DOMContentLoaded', () => {
-    document.body.addEventListener('click', function iniciarComVoz() {
-        exibirMensagemInicial();
-        document.body.removeEventListener('click', iniciarComVoz);
-    });
+    document.body.addEventListener('click', iniciarComVoz);
 });
