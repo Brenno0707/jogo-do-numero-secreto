@@ -83,11 +83,9 @@ function reiniciarJogo() {
 
     document.getElementById('reiniciar').setAttribute('disabled', true);
 
-    // Reativa o evento para falar a mensagem no próximo clique do usuário
     document.body.addEventListener('click', iniciarComVoz);
 }
 
-// Ativa a fala inicial no primeiro clique do usuário
 window.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', iniciarComVoz);
 });
