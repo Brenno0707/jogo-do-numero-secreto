@@ -1,8 +1,9 @@
 let listaDeNumerosSorteados = [];
-let numeroLimite = 10;
+const numeroLimite = 10;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
 
+// Converte número em palavra para voz ficar natural
 function numeroPorExtenso(num) {
   const numerosExtenso = ['zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez'];
   return numerosExtenso[num] || num;
@@ -16,23 +17,21 @@ function exibirTextoNaTela(tag, texto, falar = true) {
   }
 }
 
-function exibirMensagemInicial() {
-  exibirTextoNaTela('h1', 'Jogo do número secreto', false);
-  exibirTextoNaTela('p', 'Escolha um número entre 1 e 10', false);
-
-  responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
-  responsiveVoice.speak('Escolha um número entre 1 e 10', 'Brazilian Portuguese Female', { rate: 1.2 });
-}
-
-function iniciarComVoz() {
-  exibirMensagemInicial();
-  document.body.removeEventListener('click', iniciarComVoz);
-}
-
 function verificarChute() {
   let chute = document.querySelector('input').value;
 
-  if (chute == numeroSecreto) {
+  if (!chute) {
+    alert('Por favor, digite um número entre 1 e 10.');
+    return;
+  }
+
+  if (chute < 1 || chute > 10) {
+    alert('Número inválido! Escolha um número entre 1 e 10.');
+    limparCampo();
+    return;
+  }
+
+  if (parseInt(chute) === numeroSecreto) {
     let palavraTentativa = tentativas === 1 ? 'tentativa' : 'tentativas';
     let tentativasExtenso = numeroPorExtenso(tentativas);
     let mensagemTentativas = `Você descobriu o número secreto com ${tentativasExtenso} ${palavraTentativa}!`;
@@ -48,7 +47,7 @@ function verificarChute() {
 
     document.getElementById('reiniciar').removeAttribute('disabled');
   } else {
-    if (chute > numeroSecreto) {
+    if (parseInt(chute) > numeroSecreto) {
       exibirTextoNaTela('p', 'O número secreto é menor');
       responsiveVoice.speak('O número secreto é menor', 'Brazilian Portuguese Female', { rate: 1.2 });
     } else {
@@ -61,12 +60,11 @@ function verificarChute() {
 }
 
 function gerarNumeroAleatorio() {
-  let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
-  let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
-
-  if (quantidadeDeElementosNaLista == numeroLimite) {
+  if (listaDeNumerosSorteados.length === numeroLimite) {
     listaDeNumerosSorteados = [];
   }
+
+  let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
 
   if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
     return gerarNumeroAleatorio();
@@ -77,8 +75,7 @@ function gerarNumeroAleatorio() {
 }
 
 function limparCampo() {
-  let chute = document.querySelector('input');
-  chute.value = '';
+  document.querySelector('input').value = '';
 }
 
 function reiniciarJogo() {
@@ -86,15 +83,24 @@ function reiniciarJogo() {
   limparCampo();
   tentativas = 1;
 
-  exibirMensagemInicial(); // Chama a mensagem inicial e fala
+  // Atualiza a tela (sem falar, para evitar bloqueio)
+  exibirTextoNaTela('h1', 'Jogo do número secreto', false);
+  exibirTextoNaTela('p', 'Escolha um número entre 1 e 10', false);
 
   document.getElementById('reiniciar').setAttribute('disabled', true);
-
-  // Remove e adiciona para garantir o evento correto no clique seguinte
-  document.body.removeEventListener('click', iniciarComVoz);
-  document.body.addEventListener('click', iniciarComVoz);
 }
 
+// INICIALIZA OS EVENTOS DE CLIQUE APÓS CARREGAR A PÁGINA
 window.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', iniciarComVoz);
+  // Botão Chutar
+  document.getElementById('botaoChutar').addEventListener('click', verificarChute);
+
+  // Botão Novo Jogo - dispara reiniciar + voz
+  document.getElementById('reiniciar').addEventListener('click', () => {
+    reiniciarJogo();
+
+    // Fala dentro do clique pra não ser bloqueado pelo navegador
+    responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+    responsiveVoice.speak('Escolha um número entre 1 e 10', 'Brazilian Portuguese Female', { rate: 1.2 });
+  });
 });
