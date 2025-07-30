@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
   btnChutar.addEventListener('click', verificarChute);
   btnReiniciar.addEventListener('click', reiniciarJogo);
 
-  // Ativa o chute ao apertar Enter no input
   inputNumero.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
       verificarChute();
