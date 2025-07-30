@@ -124,3 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  const btnStart = document.getElementById('btnStart');
+  btnStart.addEventListener('click', function () {
+    alert('BOTÃO FUNCIONANDO! Você clicou em Começar.');
+  });
+});
