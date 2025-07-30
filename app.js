@@ -4,77 +4,82 @@ let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
 
 function exibirTextoNaTela(tag, texto, falar = true) {
-  let campo = document.querySelector(tag);
-  campo.innerHTML = texto;
-  if (falar) {
-    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', { rate: 1.2 });
-  }
+    let campo = document.querySelector(tag);
+    campo.innerHTML = texto;
+    if (falar) {
+        responsiveVoice.speak(texto, 'Brazilian Portuguese Female', { rate: 1.2 });
+    }
 }
 
 function exibirMensagemInicial() {
-  exibirTextoNaTela('h1', 'Jogo do número secreto', false);
-  exibirTextoNaTela('p', 'Escolha um número entre 1 e 10');
+    exibirTextoNaTela('h1', 'Jogo do número secreto', false);
+    exibirTextoNaTela('p', 'Escolha um número entre 1 e 10', false);
+
+    responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+    responsiveVoice.speak('Escolha um número entre 1 e 10', 'Brazilian Portuguese Female', { rate: 1.2 });
 }
 
 function verificarChute() {
-  let chute = document.querySelector('input').value;
+    let chute = document.querySelector('input').value;
 
-  if (chute == numeroSecreto) {
-    let mensagemTitulo = 'Acertou!';
-    let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
-    let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
+    if (chute == numeroSecreto) {
+        let mensagemTitulo = 'Acertou!';
+        let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
+        let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
 
-    exibirTextoNaTela('h1', mensagemTitulo);
-    exibirTextoNaTela('p', mensagemTentativas, false);
+        exibirTextoNaTela('h1', mensagemTitulo);
+        exibirTextoNaTela('p', mensagemTentativas);
 
-    responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
-    responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
+        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
+        responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
 
-    document.getElementById('reiniciar').removeAttribute('disabled');
-  } else {
-    if (chute > numeroSecreto) {
-      exibirTextoNaTela('p', 'O número secreto é menor');
+        document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
-      exibirTextoNaTela('p', 'O número secreto é maior');
+        if (chute > numeroSecreto) {
+            exibirTextoNaTela('p', 'O número secreto é menor');
+            responsiveVoice.speak('O número secreto é menor', 'Brazilian Portuguese Female', { rate: 1.2 });
+        } else {
+            exibirTextoNaTela('p', 'O número secreto é maior');
+            responsiveVoice.speak('O número secreto é maior', 'Brazilian Portuguese Female', { rate: 1.2 });
+        }
+        tentativas++;
+        limparCampo();
     }
-    tentativas++;
-    limparCampo();
-  }
 }
 
 function gerarNumeroAleatorio() {
-  let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
-  let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
+    let numeroEscolhido = parseInt(Math.random() * numeroLimite + 1);
+    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
 
-  if (quantidadeDeElementosNaLista == numeroLimite) {
-    listaDeNumerosSorteados = [];
-  }
+    if (quantidadeDeElementosNaLista == numeroLimite) {
+        listaDeNumerosSorteados = [];
+    }
 
-  if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
-    return gerarNumeroAleatorio();
-  } else {
-    listaDeNumerosSorteados.push(numeroEscolhido);
-    return numeroEscolhido;
-  }
+    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
+        return gerarNumeroAleatorio();
+    } else {
+        listaDeNumerosSorteados.push(numeroEscolhido);
+        return numeroEscolhido;
+    }
 }
 
 function limparCampo() {
-  let chute = document.querySelector('input');
-  chute.value = '';
+    let chute = document.querySelector('input');
+    chute.value = '';
 }
 
 function reiniciarJogo() {
-  numeroSecreto = gerarNumeroAleatorio();
-  limparCampo();
-  tentativas = 1;
-  exibirMensagemInicial();
-  document.getElementById('reiniciar').setAttribute('disabled', true);
+    numeroSecreto = gerarNumeroAleatorio();
+    limparCampo();
+    tentativas = 1;
+    exibirMensagemInicial();
+    document.getElementById('reiniciar').setAttribute('disabled', true);
 }
 
-// Só dispara a mensagem inicial com voz no primeiro clique do usuário
+// Mensagem inicial só na primeira interação (clique)
 window.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', function handler() {
-    exibirMensagemInicial();
-    document.body.removeEventListener('click', handler);
-  });
+    document.body.addEventListener('click', function iniciarComVoz() {
+        exibirMensagemInicial();
+        document.body.removeEventListener('click', iniciarComVoz);
+    });
 });
