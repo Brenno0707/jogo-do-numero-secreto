@@ -87,25 +87,17 @@ function reiniciarJogo() {
 
   document.getElementById('reiniciar').setAttribute('disabled', true);
 
-  // Fala a primeira parte
-  responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
-
-  // Após 1,5 segundos fala a segunda parte
-  setTimeout(() => {
-    responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
-  }, 1500);
+  // Fala toda a frase de uma vez, com ponto para pausa natural
+  responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('botaoChutar').addEventListener('click', verificarChute);
   document.getElementById('reiniciar').addEventListener('click', reiniciarJogo);
 
-  // Primeira fala ao clicar no body
+  // Fala inicial ao clicar pela primeira vez na página (para ativar voz)
   document.body.addEventListener('click', function ativarVozInicial() {
-    responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
-    setTimeout(() => {
-      responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
-    }, 1500);
+    responsiveVoice.speak('Jogo do número secreto. Escolha um número entre 1 a 10.', 'Brazilian Portuguese Female', { rate: 1.2 });
     document.body.removeEventListener('click', ativarVozInicial);
   });
 
