@@ -85,11 +85,13 @@ function reiniciarJogo() {
   numeroSecreto = gerarNumeroAleatorio();
   limparCampo();
   tentativas = 1;
-  exibirTextoNaTela('h1', 'Jogo do número secreto', false);
-  exibirTextoNaTela('p', 'Escolha um número entre 1 e 10', false);
+
+  exibirMensagemInicial(); // Chama a mensagem inicial e fala
 
   document.getElementById('reiniciar').setAttribute('disabled', true);
 
+  // Remove e adiciona para garantir o evento correto no clique seguinte
+  document.body.removeEventListener('click', iniciarComVoz);
   document.body.addEventListener('click', iniciarComVoz);
 }
 
