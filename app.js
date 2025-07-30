@@ -94,39 +94,4 @@ document.addEventListener('DOMContentLoaded', function () {
         instrucao.innerText = 'O número secreto é maior';
         falar('O número secreto é maior');
       }
-      tentativas++;
-    }
-
-    inputNumero.value = '';
-    inputNumero.focus();
-  }
-
-  function reiniciarJogo() {
-    numeroSecreto = gerarNumeroAleatorio();
-    tentativas = 1;
-    inputNumero.value = '';
-    feedback.innerText = '';
-    btnReiniciar.disabled = true;
-    titulo.innerText = 'Jogo do número secreto';
-    instrucao.innerText = 'Escolha um número entre 1 a 10';
-
-    falar('Jogo do número secreto. Escolha um número entre 1 a 10.');
-    inputNumero.focus();
-  }
-
-  btnStart.addEventListener('click', iniciarJogo);
-  btnChutar.addEventListener('click', verificarChute);
-  btnReiniciar.addEventListener('click', reiniciarJogo);
-
-  inputNumero.addEventListener('keyup', function (e) {
-    if (e.key === 'Enter') {
-      verificarChute();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  const btnStart = document.getElementById('btnStart');
-  btnStart.addEventListener('click', function () {
-    alert('BOTÃO FUNCIONANDO! Você clicou em Começar.');
-  });
-});
+      ten
