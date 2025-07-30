@@ -30,8 +30,10 @@ function verificarChute() {
         exibirTextoNaTela('h1', mensagemTitulo);
         exibirTextoNaTela('p', mensagemTentativas);
 
-        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
-        responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
+        // Falar uma frase após a outra
+        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 }, function() {
+            responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
+        });
 
         document.getElementById('reiniciar').removeAttribute('disabled');
     } else {
