@@ -3,6 +3,11 @@ let numeroLimite = 10;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
 
+function numeroPorExtenso(num) {
+  const numerosExtenso = ['zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez'];
+  return numerosExtenso[num] || num;
+}
+
 function exibirTextoNaTela(tag, texto, falar = true) {
   let campo = document.querySelector(tag);
   campo.innerHTML = texto;
@@ -28,18 +33,18 @@ function verificarChute() {
   let chute = document.querySelector('input').value;
 
   if (chute == numeroSecreto) {
-    let mensagemTitulo = 'Acertou!';
-    let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
-    let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
+    let palavraTentativa = tentativas === 1 ? 'tentativa' : 'tentativas';
+    let tentativasExtenso = numeroPorExtenso(tentativas);
+    let mensagemTentativas = `Você descobriu o número secreto com ${tentativasExtenso} ${palavraTentativa}!`;
 
-    exibirTextoNaTela('h1', mensagemTitulo);
-    exibirTextoNaTela('p', mensagemTentativas);
+    exibirTextoNaTela('h1', 'Acertou!', false);
+    exibirTextoNaTela('p', mensagemTentativas, false);
 
-    responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
+    responsiveVoice.speak('Acertou!', 'Brazilian Portuguese Female', { rate: 1.2 });
 
     setTimeout(() => {
       responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
-    }, 1000); // 1 segundo de pausa
+    }, 1000);
 
     document.getElementById('reiniciar').removeAttribute('disabled');
   } else {
