@@ -82,14 +82,14 @@ function reiniciarJogo() {
   limparCampo();
   tentativas = 1;
 
-  // AQUI O TEXTO VISUAL FICA "Jogo do número secreto"
+  // Texto fixo na tela
   document.querySelector('h1').innerHTML = 'Jogo do número secreto';
   document.querySelector('p').innerHTML = 'Escolha um número entre 1 a 10';
 
   document.getElementById('reiniciar').setAttribute('disabled', true);
 
-  // VOZ FALANDO "Adivinha o número secreto"
-  responsiveVoice.speak('Adivinha o número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+  // Voz fala exatamente o mesmo texto que aparece na tela
+  responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
   responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
 }
 
@@ -97,14 +97,14 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('botaoChutar').addEventListener('click', verificarChute);
   document.getElementById('reiniciar').addEventListener('click', reiniciarJogo);
 
-  // VOZ AO CARREGAR PELA PRIMEIRA VEZ: "Adivinha o número secreto"
+  // Fala ao carregar pela primeira vez
   document.body.addEventListener('click', function ativarVozInicial() {
-    responsiveVoice.speak('Adivinha o número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
+    responsiveVoice.speak('Jogo do número secreto', 'Brazilian Portuguese Female', { rate: 1.2 });
     responsiveVoice.speak('Escolha um número entre 1 a 10', 'Brazilian Portuguese Female', { rate: 1.2 });
     document.body.removeEventListener('click', ativarVozInicial);
   });
 
-  // MOSTRAR NA TELA O TEXTO ORIGINAL NA INICIALIZAÇÃO
+  // Texto inicial na tela
   document.querySelector('h1').innerHTML = 'Jogo do número secreto';
   document.querySelector('p').innerHTML = 'Escolha um número entre 1 a 10';
 });
