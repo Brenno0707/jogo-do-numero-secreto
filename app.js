@@ -20,12 +20,15 @@ function verificarChute() {
     let chute = document.querySelector('input').value;
 
     if (chute == numeroSecreto) {
-        exibirTextoNaTela('h1', 'Acertou!');
+        let mensagemTitulo = 'Acertou!';
         let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
         let mensagemTentativas = `Você descobriu o número secreto com ${tentativas} ${palavraTentativa}!`;
-        exibirTextoNaTela('p', mensagemTentativas, false);
 
-        responsiveVoice.speak('Acertou!', 'Brazilian Portuguese Female', { rate: 1.2 });
+        exibirTextoNaTela('h1', mensagemTitulo);
+        exibirTextoNaTela('p', mensagemTentativas);
+
+        // Falar as duas mensagens, uma após a outra
+        responsiveVoice.speak(mensagemTitulo, 'Brazilian Portuguese Female', { rate: 1.2 });
         responsiveVoice.speak(mensagemTentativas, 'Brazilian Portuguese Female', { rate: 1.2 });
 
         document.getElementById('reiniciar').removeAttribute('disabled');
@@ -69,7 +72,7 @@ function reiniciarJogo() {
     document.getElementById('reiniciar').setAttribute('disabled', true);
 }
 
-// FALA A MENSAGEM INICIAL APENAS NA PRIMEIRA INTERAÇÃO DO USUÁRIO
+// Só fala a mensagem inicial no primeiro clique do usuário (para evitar bloqueios)
 window.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', function iniciarComVoz() {
         exibirMensagemInicial();
